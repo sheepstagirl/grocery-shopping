@@ -1,0 +1,23 @@
+
+import requests
+import json
+budget = input("What is the maximum amount of money that you would be willing to pay for 1 item (do not enter a '$'sign): ")
+print("\n")
+health = input("how heathy (out of 10) would you like your grocery store to be (enter a whole number): ")
+print("\n")
+days_for_delivery = input("if you are getting delivery, enter the number of days that you would like it by (if you don't want delivery, enter'0'): ")
+print("\n")
+shipping_price = input("What is the maximum amount of money you would like to spend on shipping (do not enter a '$' Sign): ")
+print("\n")
+delivery = input("Do you want delivery?(Capitalize the 'Y'in yes and 'N' in no): ")
+print("\n")
+data = {"BUDGET (max $ per item)":budget,"How important is healthy food?(out of 10)":health,"When do you want it delivered (days)(0 if you don't want delivery)":days_for_delivery,"Price for shipping ($) (0 if you don't want delivery)":shipping_price,"Delivery Yes or No":delivery}
+def get_prediction(data):
+  url = 'https://l47syleshe.execute-api.us-east-1.amazonaws.com/Predict/d822638d-778d-495b-be24-afb0c3938299'
+  r = requests.post(url, data=json.dumps(data))
+  response = getattr(r,'_content').decode("utf-8")
+  #print(response)
+  return response
+prediction = json.loads(json.loads(get_prediction(data))['body'])['predicted_label']
+print("Based on the answers that you gave me, I think you should get your groceries from")
+print(prediction)
